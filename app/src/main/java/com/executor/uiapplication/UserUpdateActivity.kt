@@ -9,19 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.text.Editable
 import android.text.TextUtils
-import android.view.View
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
-import com.executor.uiapplication.db.UserDatabase
+import com.bumptech.glide.Glide
 import com.executor.uiapplication.db.UserEntity
 import com.executor.uiapplication.db.UserViewModel
 import kotlinx.android.synthetic.main.activity_add_user.*
+import kotlinx.android.synthetic.main.activity_user_update.*
 import kotlinx.android.synthetic.main.activity_users_details.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.coroutines.GlobalScope
@@ -31,10 +28,9 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NewUserActivity : AppCompatActivity() {
+class UserUpdateActivity : AppCompatActivity() {
 
     private lateinit var mUserViewModel: UserViewModel
-
     private val CAMERA_REQUEST = 100
     private val STORAGE_REQUEST = 101
 
@@ -43,28 +39,27 @@ class NewUserActivity : AppCompatActivity() {
 
     private var photoPath: String? = null
 
-    private var myAge = 0
+    companion object {
+        private var myAge = 0
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_user)
+        setContentView(R.layout.activity_user_update)
 
-        cameraPermission =
-            arrayOf(
-                android.Manifest.permission.CAMERA,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-        // initialize views
         setSupportActionBar(add_toolbar)
-        supportActionBar?.title = "Add User Detail"
+        supportActionBar?.title = "Update User Detail"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         add_toolbar?.setNavigationOnClickListener {
             finish()
         }
-
-
-        ivProfile.setOnClickListener {
+        cameraPermission =
+            arrayOf(
+                android.Manifest.permission.CAMERA,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        ivUpdateProfile.setOnClickListener {
             if (!checkCameraPermission()) {
                 requestCameraPermission()
             } else {
@@ -72,16 +67,38 @@ class NewUserActivity : AppCompatActivity() {
             }
         }
 
+
+        mUserViewModel = ViewModelProvider(this)[UserViewModel::class.java]
+
+        val updateIntent = mUserViewModel.getItemDetail(intent.getIntExtra("id", 0))
+        updateIntent.observe(this) {
+            Update_First_Name.setText(it.fName)
+            Update_Last_Name.setText(it.lName)
+            Update_Emails.setText(it.email)
+            Update_DOB.text = it.dob
+            Update_Phone_Number.setText(it.number)
+            Glide.with(applicationContext).load(it.image).into(ivUpdateProfile)
+            photoPath = it.image
+        }
+
+        val sdf = SimpleDateFormat("dd-MM-yyyy")
+
+//        val date = sdf.parse(intent.getStringExtra("dob")!!)
+
+//        val date = sdf.parse(updateIntent.observe(this){it.dob}.toString())!!
+
         val myCalender = Calendar.getInstance()
+//        myCalender.time = date
 
         val datePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+
             myCalender.set(Calendar.YEAR, year)
             myCalender.set(Calendar.MONTH, month)
             myCalender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             updatable(myCalender)
         }
 
-        DOB.setOnClickListener {
+        Update_DOB.setOnClickListener {
             val dialog = DatePickerDialog(
                 this,
                 datePicker,
@@ -93,16 +110,18 @@ class NewUserActivity : AppCompatActivity() {
             dialog.show()
         }
 
-        mUserViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
-        Add_User_Cancel.setOnClickListener {
+        Update_User_Save.setOnClickListener {
+            UpdateDataToDatabase()
+        }
+
+        Update_User_Cancel.setOnClickListener {
             finish()
         }
-        Add_User_Save.setOnClickListener {
-            insertDataToDatabase()
-        }
+
 
     }
+
 
     private fun showDialog() {
         val alertDialog = AlertDialog.Builder(this)
@@ -179,11 +198,11 @@ class NewUserActivity : AppCompatActivity() {
         when (requestCode) {
             0 -> if (resultCode == RESULT_OK) {
 //                ivProfile.rotation = 90f
-                ivProfile.setImageURI(Uri.parse(photoPath))
+                ivUpdateProfile.setImageURI(Uri.parse(photoPath))
             }
             1 -> if (resultCode == RESULT_OK) {
                 val selectedImage: Uri? = imageReturnedIntent?.data
-                ivProfile.setImageURI(selectedImage)
+                ivUpdateProfile.setImageURI(selectedImage)
                 photoPath = selectedImage.toString()
             }
         }
@@ -209,24 +228,20 @@ class NewUserActivity : AppCompatActivity() {
         }
     }
 
+    private fun UpdateDataToDatabase() {
 
-    private fun updatable(myCalender: Calendar) {
+        val id = intent.getIntExtra("id", 0)
+        val fName = Update_First_Name.text.toString()
+        val lName = Update_Last_Name.text.toString()
+        val email = Update_Emails.text.toString()
+        val number = Update_Phone_Number.text.toString()
+        val dob = Update_DOB.text.toString()
+
+        val date = Update_DOB.text.toString()
+        val dateParts: List<String> = date.split("-")
+        val year = dateParts[2]
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val birthYear = myCalender.get(Calendar.YEAR)
-        myAge = currentYear - birthYear
-        val myFormat = "dd-MM-yyyy"
-        val sdf = SimpleDateFormat(myFormat, Locale.UK)
-        DOB.text = sdf.format(myCalender.time)
-    }
-
-    private fun insertDataToDatabase() {
-
-        val fName = First_Name.text.toString()
-        val lName = Last_Name.text.toString()
-        val email = Emails.text.toString()
-        val dob = DOB.text.toString()
-        val number = Phone_Number.text.toString()
-
+        myAge = currentYear - year.toInt()
 
         if (fName.isEmpty()) {
             First_Name.error = "cannot be empty"
@@ -240,47 +255,46 @@ class NewUserActivity : AppCompatActivity() {
             Phone_Number.error = "cannot be Empty"
             return
         }
-        if (email.isEmpty()) {
-            Emails.error = "cannot be Empty"
-            return
-        }
 
-        if (!TextUtils.isEmpty(dob) && !TextUtils.isEmpty(photoPath)) {
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                Toast.makeText(this, " Invalid Email Format", Toast.LENGTH_SHORT).show()
-            } else {
-                if (UserDatabase.getDatabase(this).userDao().isEmailExist(email) == 0) {
-                    val user =
-                        UserEntity(
-                            0,
-                            photoPath!!,
-                            fName,
-                            lName,
-                            email,
-                            dob,
-                            myAge,
-                            number,
-                            Date()
-                        )
-                    GlobalScope.launch {
-                        mUserViewModel.insertUser(user)
-                    }
 
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+        if (!TextUtils.isEmpty(dob)) {
+            val user =
+                UserEntity(
+                    id,
+                    photoPath!!,
+                    fName,
+                    lName,
+                    email,
+                    dob,
+                    myAge,
+                    number,
+                    Date()
+                )
 
-                    Toast.makeText(this, "Successfully Added", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "This Email id Already Exists", Toast.LENGTH_SHORT).show()
-                }
+            GlobalScope.launch {
+                mUserViewModel.updateUser(user)
             }
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+
+            Toast.makeText(this, "Successfully Updated", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(
                 this,
-                "Please fill out DOB and Photo Fields ",
+                "Please fill out all Fields ",
                 Toast.LENGTH_SHORT
             )
                 .show()
         }
+    }
+
+    private fun updatable(myCalender: Calendar) {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val birthYear = myCalender.get(Calendar.YEAR)
+        myAge = currentYear - birthYear
+        val myFormat = "dd-MM-yyyy"
+        val sdf = SimpleDateFormat(myFormat, Locale.UK)
+        Update_DOB.text = sdf.format(myCalender.time)
     }
 }

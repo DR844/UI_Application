@@ -4,10 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:scrollbarAlwaysDrawVerticalTrack="true"
-    android:scrollbars="vertical"
-    tools:context=".NewUserActivity">
-
+    tools:context=".UserUpdateActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,12 +20,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
                 <ImageView
-                    android:id="@+id/ivProfile"
+                    android:id="@+id/ivUpdateProfile"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:layout_gravity="center_horizontal"
@@ -58,7 +54,7 @@
                         android:layout_marginLeft="16dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/First_Name"
+                            android:id="@+id/Update_First_Name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -66,7 +62,6 @@
                             android:singleLine="true" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,7 +85,7 @@
                         android:layout_marginLeft="16dp">
 
                         <EditText
-                            android:id="@+id/Last_Name"
+                            android:id="@+id/Update_Last_Name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -121,7 +116,7 @@
                         android:layout_marginLeft="16dp">
 
                         <EditText
-                            android:id="@+id/Phone_Number"
+                            android:id="@+id/Update_Phone_Number"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -155,12 +150,14 @@
                         android:layout_marginLeft="16dp">
 
                         <EditText
-                            android:id="@+id/Emails"
+                            android:id="@+id/Update_Emails"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
+                            android:editable="false"
                             android:hint="Email"
-                            android:singleLine="true" />
+                            android:singleLine="true"
+                            tools:ignore="Deprecated" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -179,27 +176,16 @@
                         android:src="@drawable/date_icon" />
 
                     <TextView
-                        android:id="@+id/DOB"
+                        android:id="@+id/Update_DOB"
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="16dp"
                         android:layout_marginLeft="18dp"
                         android:clickable="true"
                         android:focusable="true"
                         android:hint="Date Of Birth"
-                        android:textSize="20sp" />
-
-                    <!--                <EditText-->
-                    <!--                    android:id="@+id/DOB"-->
-                    <!--                    android:layout_width="match_parent"-->
-                    <!--                    android:layout_height="35dp"-->
-                    <!--                    android:layout_gravity="center_vertical"-->
-                    <!--                    android:clickable="true"-->
-                    <!--                    android:focusable="true"-->
-                    <!--                    android:hint="Date Of Birth"-->
-                    <!--                    android:singleLine="true" />-->
-
+                        android:textSize="25sp" />
 
                 </LinearLayout>
 
@@ -210,7 +196,7 @@
                     android:layout_margin="16dp">
 
                     <Button
-                        android:id="@+id/Add_User_Cancel"
+                        android:id="@+id/Update_User_Cancel"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -222,7 +208,7 @@
                         android:textColor="@android:color/white" />
 
                     <Button
-                        android:id="@+id/Add_User_Save"
+                        android:id="@+id/Update_User_Save"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -231,7 +217,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/button"
                         android:gravity="center"
-                        android:text="Save"
+                        android:text="Update"
                         android:textAllCaps="true"
                         android:textColor="@android:color/white" />
 
@@ -242,6 +228,5 @@
         </ScrollView>
 
     </LinearLayout>
-
 
 </RelativeLayout>

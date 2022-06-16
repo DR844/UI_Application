@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
 
-     val getAllUser: LiveData<List<UserEntity>>
+    val getAllUser: LiveData<List<UserEntity>>
     private val repository: UserRepository
 
     init {
@@ -42,4 +42,18 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
         return email.toInt()
     }
+
+     fun getItemDetail(id: Int): LiveData<UserEntity> {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getItemDetail(id)
+        }
+        return repository.getItemDetail(id)
+    }
+
+    suspend fun deleteByUserId(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteByUserId(id)
+        }
+    }
+
 }

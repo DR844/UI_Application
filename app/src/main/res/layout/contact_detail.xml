@@ -14,6 +14,7 @@
         android:paddingRight="16dp">
 
         <ImageView
+            android:id="@+id/showImg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -28,16 +29,17 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/User_Number"
+                android:id="@+id/show_User_Number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey_dark"
                 android:textSize="18sp" />
 
             <TextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phone Number"
+                android:hint="Phone Number"
                 android:textColor="@color/grey_light"
                 android:textSize="16sp" />
 
@@ -73,7 +75,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/User_Email"
+                android:id="@+id/show_User_Email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey_dark"
@@ -82,7 +84,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email"
+                android:hint="Email"
                 android:textColor="@color/grey_light"
                 android:textSize="16sp" />
 
@@ -118,7 +120,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/User_DOB"
+                android:id="@+id/show_User_DOB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey_dark"
@@ -127,11 +129,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date Of Birth"
+                android:hint="Date Of Birth"
                 android:textColor="@color/grey_light"
                 android:textSize="16sp" />
 
             <View
+                android:id="@+id/show_DOB"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
@@ -164,7 +167,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/User_Age"
+                android:id="@+id/show_User_Age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey_dark"
@@ -173,7 +176,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Age"
+                android:hint="Age"
                 android:textColor="@color/grey_light"
                 android:textSize="16sp" />
 

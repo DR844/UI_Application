@@ -12,20 +12,18 @@ import com.executor.uiapplication.db.UserViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.lang.Boolean.TYPE
 
 class MainActivity : AppCompatActivity(), UserAdapter.RowClickListener {
+
     private lateinit var mUserViewModel: UserViewModel
-    var TYPES = "type"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
         add_User.setOnClickListener {
-            // add new contact
             val intent = Intent(this, NewUserActivity::class.java)
-//            intent.putExtra(TYPES, 0)
             startActivity(intent)
         }
 
@@ -59,14 +57,14 @@ class MainActivity : AppCompatActivity(), UserAdapter.RowClickListener {
 
     override fun onItemClickListener(userEntity: UserEntity) {
         val intent = Intent(this@MainActivity, UsersDetailsActivity::class.java)
-//        intent.putExtra("User", userEntity[position])
         intent.putExtra("id", userEntity.id)
-        intent.putExtra("fname", userEntity.fName)
-        intent.putExtra("lname", userEntity.lName)
-        intent.putExtra("email", userEntity.email)
+        startActivity(intent)
+    }
+
+    override fun onUpdateClickListener(userEntity: UserEntity) {
+        val intent = Intent(this@MainActivity, UserUpdateActivity::class.java)
+        intent.putExtra("id", userEntity.id)
         intent.putExtra("dob", userEntity.dob)
-        intent.putExtra("number", userEntity.number)
-        intent.putExtra("img", userEntity.image)
         startActivity(intent)
     }
 }

@@ -41,7 +41,7 @@ class NewUserActivity : AppCompatActivity() {
     lateinit var cameraPermission: Array<String>
 
 
-    private var photoPath: String? = null
+    private var photoPath: String? = "hi"
 
     private var myAge = 0
 
@@ -101,6 +101,11 @@ class NewUserActivity : AppCompatActivity() {
         Add_User_Save.setOnClickListener {
             insertDataToDatabase()
         }
+
+//        View.onFocusChangeListener(View, ) {
+//            llAddImg.setColorFilter(R.drawable.ic_user)
+//
+//        }
 
     }
 
@@ -229,23 +234,23 @@ class NewUserActivity : AppCompatActivity() {
 
 
         if (fName.isEmpty()) {
-            First_Name.error = "cannot be empty"
+            First_Name.error = "Required!!"
             return
         }
         if (lName.isEmpty()) {
-            Last_Name.error = "cannot be Empty"
+            Last_Name.error = "Required!!"
             return
         }
         if (number.isEmpty()) {
-            Phone_Number.error = "cannot be Empty"
+            Phone_Number.error = "Required!!"
             return
         }
         if (email.isEmpty()) {
-            Emails.error = "cannot be Empty"
+            Emails.error = "Required!!"
             return
         }
 
-        if (!TextUtils.isEmpty(dob) && !TextUtils.isEmpty(photoPath)) {
+        if (!TextUtils.isEmpty(dob) ) {
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 Toast.makeText(this, " Invalid Email Format", Toast.LENGTH_SHORT).show()
             } else {
@@ -271,13 +276,13 @@ class NewUserActivity : AppCompatActivity() {
 
                     Toast.makeText(this, "Successfully Added", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "This Email id Already Exists", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Email id Already Exists", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
             Toast.makeText(
                 this,
-                "Please fill out DOB and Photo Fields ",
+                "Please fill out DOB Fields ",
                 Toast.LENGTH_SHORT
             )
                 .show()

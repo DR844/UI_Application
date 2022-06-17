@@ -1,12 +1,15 @@
 package com.executor.uiapplication
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
 import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -23,8 +26,10 @@ class UsersDetailsActivity : AppCompatActivity() {
     private lateinit var mUserViewModel: UserViewModel
 
     var id: Int = 0
+    var dateOfBirth: String? = null
 
 
+    @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_users_details)
@@ -43,6 +48,22 @@ class UsersDetailsActivity : AppCompatActivity() {
         }
 
 
+        llPhone.setOnClickListener {
+//            llPhone.setBackgroundColor(R.drawable.phone_icon_focused)
+            val toggle: ToggleButton = findViewById(R.id.llPhone)
+            toggle.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    // The toggle is enabled
+                    llPhone.setBackgroundColor(R.drawable.ic_phone_icon)
+                } else {
+                    // The toggle is disabled
+                    llPhone.setBackgroundColor(R.drawable.ic_phone)
+                }
+            }
+//            llPhone.showDividers
+        }
+
+
         showIntent.observe(this) {
             supportActionBar?.title = it.fName + " " + it.lName
             show_User_Email.text = it.email
@@ -51,6 +72,7 @@ class UsersDetailsActivity : AppCompatActivity() {
             show_User_Age.text = it.age.toString()
             Glide.with(applicationContext).load(it.image).into(detail_pic)
             id = it.id
+            dateOfBirth = it.dob
         }
     }
 
@@ -64,15 +86,15 @@ class UsersDetailsActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menu_edit -> {
                 val intent = Intent(this, UserUpdateActivity::class.java)
-                mUserViewModel = ViewModelProvider(this)[UserViewModel::class.java]
                 intent.putExtra("id", id)
+                intent.putExtra("dob", dateOfBirth)
                 startActivity(intent)
                 return true
             }
             R.id.menu_delete -> {
                 val dialog = AlertDialog.Builder(this)
-                dialog.setTitle("Are you Sure Delete this  ?")
-                dialog.setPositiveButton("Delete") { _, _ ->
+                dialog.setTitle("Are you sure delete?")
+                dialog.setPositiveButton("Yes") { _, _ ->
                     GlobalScope.launch {
                         mUserViewModel.deleteByUserId(intent.getIntExtra("id", 0))
                     }
@@ -80,7 +102,6 @@ class UsersDetailsActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                     Toast.makeText(this, " Delete", Toast.LENGTH_SHORT).show()
-
                 }
                 dialog.setNegativeButton("No") { _, _ ->
                     Toast.makeText(this, "Not Delete", Toast.LENGTH_SHORT).show()

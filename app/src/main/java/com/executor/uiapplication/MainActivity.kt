@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity(), UserAdapter.RowClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
 
         add_User.setOnClickListener {
@@ -42,12 +44,12 @@ class MainActivity : AppCompatActivity(), UserAdapter.RowClickListener {
 
     override fun onDeleteUserClickListener(userEntity: UserEntity) {
         val dialog = AlertDialog.Builder(this@MainActivity)
-        dialog.setTitle("Are you Sure Delete this ${userEntity.fName} ?")
-        dialog.setPositiveButton("Delete") { _, _ ->
+        dialog.setTitle("Are you sure delete  ${userEntity.fName}?")
+        dialog.setPositiveButton("Yes") { _, _ ->
             GlobalScope.launch {
                 mUserViewModel.deleteUser(userEntity)
             }
-            Toast.makeText(this, "${userEntity.fName} Delete", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, userEntity.fName, Toast.LENGTH_SHORT).show()
         }
         dialog.setNegativeButton("No") { _, _ ->
             Toast.makeText(this, "Not Delete", Toast.LENGTH_SHORT).show()

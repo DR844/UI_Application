@@ -83,12 +83,12 @@ class UserUpdateActivity : AppCompatActivity() {
 
         val sdf = SimpleDateFormat("dd-MM-yyyy")
 
-//        val date = sdf.parse(intent.getStringExtra("dob")!!)
+        val date = sdf.parse(intent.getStringExtra("dob")!!)
 
 //        val date = sdf.parse(updateIntent.observe(this){it.dob}.toString())!!
 
         val myCalender = Calendar.getInstance()
-//        myCalender.time = date
+        myCalender.time = date!!
 
         val datePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
 
@@ -244,15 +244,15 @@ class UserUpdateActivity : AppCompatActivity() {
         myAge = currentYear - year.toInt()
 
         if (fName.isEmpty()) {
-            First_Name.error = "cannot be empty"
+            First_Name.error = "Required!!"
             return
         }
         if (lName.isEmpty()) {
-            Last_Name.error = "cannot be Empty"
+            Last_Name.error = "Required!!"
             return
         }
         if (number.isEmpty()) {
-            Phone_Number.error = "cannot be Empty"
+            Phone_Number.error = "Required!!"
             return
         }
 

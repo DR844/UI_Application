@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/add_icon.xml" value="0.3494791666666667" />
+        <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/bg_tab_text_color.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/button.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/date_icon.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/delete_icon.xml" value="0.3494791666666667" />
@@ -12,10 +13,14 @@
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/ic_add.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/ic_address.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/ic_phone.xml" value="0.3494791666666667" />
+        <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/ic_phone_icon.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/ic_star.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/ic_user.xml" value="0.3494791666666667" />
+        <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/ic_user_grey.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/no_image.xml" value="0.3494791666666667" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/person_icon.xml" value="0.3494791666666667" />
+        <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/phone_icon_focused.xml" value="0.3494791666666667" />
+        <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/drawable/recycler_view_divider.xml" value="0.19427083333333334" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/layout/activity_add_contact.xml" value="0.33" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/layout/activity_add_user.xml" value="0.32916666666666666" />
         <entry key="..\:/Users/dipak.rana/AndroidStudioProjects/UIApplication/app/src/main/res/layout/activity_contacts_details.xml" value="0.32916666666666666" />

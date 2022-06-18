@@ -5,21 +5,22 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.executor.uiapplication.db.UserEntity
 import com.executor.uiapplication.db.UserViewModel
+import com.executor.uiapplication.uitel.LoadingDialog
 import kotlinx.android.synthetic.main.activity_add_user.*
 import kotlinx.android.synthetic.main.activity_user_update.*
-import kotlinx.android.synthetic.main.activity_users_details.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -118,8 +119,12 @@ class UserUpdateActivity : AppCompatActivity() {
         Update_User_Cancel.setOnClickListener {
             finish()
         }
-
-
+//        Update_Emails.setOnClickListener {
+//            if (llUpdateEmail.isClickable) {
+//                Update_Emails.error = "don't change"
+//                return@setOnClickListener
+//            }
+//        }
     }
 
 
@@ -276,6 +281,12 @@ class UserUpdateActivity : AppCompatActivity() {
             }
 
             val intent = Intent(this, MainActivity::class.java)
+
+            val loading = LoadingDialog(this)
+            loading.startLoading()
+            val handler = Handler()
+            handler.postDelayed({ loading.isDismiss() }, 2000)
+
             startActivity(intent)
 
             Toast.makeText(this, "Successfully Updated", Toast.LENGTH_SHORT).show()

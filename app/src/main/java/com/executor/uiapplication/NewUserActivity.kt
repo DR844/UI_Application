@@ -5,24 +5,21 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.provider.MediaStore
-import android.text.Editable
 import android.text.TextUtils
-import android.view.View
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import com.executor.uiapplication.db.UserDatabase
 import com.executor.uiapplication.db.UserEntity
 import com.executor.uiapplication.db.UserViewModel
+import com.executor.uiapplication.uitel.LoadingDialog
 import kotlinx.android.synthetic.main.activity_add_user.*
-import kotlinx.android.synthetic.main.activity_users_details.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -102,11 +99,18 @@ class NewUserActivity : AppCompatActivity() {
             insertDataToDatabase()
         }
 
-//        View.onFocusChangeListener(View, ) {
-//            llAddImg.setColorFilter(R.drawable.ic_user)
-//
-//        }
 
+        First_Name.setOnClickListener {
+            llAddImg.setColorFilter(R.drawable.ic_user)
+        }
+//        First_Name.onFocusChangeListener.onFocusChange(View(this),false){
+//            if(First_Name.isClickable){
+//
+//            }
+//        }
+//        First_Name.addTextChangedListener {
+//            llAddImg.setColorFilter(R.drawable.ic_user_grey)
+//        }
     }
 
     private fun showDialog() {
@@ -250,7 +254,7 @@ class NewUserActivity : AppCompatActivity() {
             return
         }
 
-        if (!TextUtils.isEmpty(dob) ) {
+        if (!TextUtils.isEmpty(dob)) {
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 Toast.makeText(this, " Invalid Email Format", Toast.LENGTH_SHORT).show()
             } else {
@@ -272,6 +276,12 @@ class NewUserActivity : AppCompatActivity() {
                     }
 
                     val intent = Intent(this, MainActivity::class.java)
+
+                    val loading = LoadingDialog(this)
+                    loading.startLoading()
+                    val handler = Handler()
+                    handler.postDelayed({ loading.isDismiss() }, 2000)
+
                     startActivity(intent)
 
                     Toast.makeText(this, "Successfully Added", Toast.LENGTH_SHORT).show()

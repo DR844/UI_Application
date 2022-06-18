@@ -30,7 +30,8 @@ class UserRepository(private val userDAO: UserDAO) {
     suspend fun deleteByUserId(id: Int) {
         return userDAO.deleteByUserId(id)
     }
-//    suspend fun getItemId(id: Int):Int {
-//        return userDAO.deleteByUserId(id)
-//    }
+
+    fun searchDatabase(searchQuery: String):LiveData<List<UserEntity>> {
+        return userDAO.searchDatabase(searchQuery)
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.executor.uiapplication.db.UserEntity
 import com.executor.uiapplication.db.UserViewModel
+import com.executor.uiapplication.uitel.LoadingDialog
 import kotlinx.android.synthetic.main.activity_users_details.*
 import kotlinx.android.synthetic.main.contact_detail.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
@@ -48,20 +50,20 @@ class UsersDetailsActivity : AppCompatActivity() {
         }
 
 
-        llPhone.setOnClickListener {
-//            llPhone.setBackgroundColor(R.drawable.phone_icon_focused)
-            val toggle: ToggleButton = findViewById(R.id.llPhone)
-            toggle.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    // The toggle is enabled
-                    llPhone.setBackgroundColor(R.drawable.ic_phone_icon)
-                } else {
-                    // The toggle is disabled
-                    llPhone.setBackgroundColor(R.drawable.ic_phone)
-                }
-            }
-//            llPhone.showDividers
-        }
+//        llPhone.setOnClickListener {
+////            llPhone.setBackgroundColor(R.drawable.phone_icon_focused)
+//            val toggle: ToggleButton = findViewById(R.id.llPhone)
+//            toggle.setOnCheckedChangeListener { _, isChecked ->
+//                if (isChecked) {
+//                    // The toggle is enabled
+//                    llPhone.setBackgroundColor(R.drawable.ic_phone_icon)
+//                } else {
+//                    // The toggle is disabled
+//                    llPhone.setBackgroundColor(R.drawable.ic_phone)
+//                }
+//            }
+////            llPhone.showDividers
+//        }
 
 
         showIntent.observe(this) {
@@ -86,6 +88,12 @@ class UsersDetailsActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menu_edit -> {
                 val intent = Intent(this, UserUpdateActivity::class.java)
+
+                val loading = LoadingDialog(this)
+                loading.startLoading()
+                val handler = Handler()
+                handler.postDelayed({ loading.isDismiss() }, 1000)
+
                 intent.putExtra("id", id)
                 intent.putExtra("dob", dateOfBirth)
                 startActivity(intent)
@@ -101,6 +109,12 @@ class UsersDetailsActivity : AppCompatActivity() {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
+
+                    val loading = LoadingDialog(this)
+                    loading.startLoading()
+                    val handler = Handler()
+                    handler.postDelayed({ loading.isDismiss() }, 2000)
+
                     Toast.makeText(this, " Delete", Toast.LENGTH_SHORT).show()
                 }
                 dialog.setNegativeButton("No") { _, _ ->

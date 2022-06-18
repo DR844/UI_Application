@@ -43,7 +43,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         return email.toInt()
     }
 
-     fun getItemDetail(id: Int): LiveData<UserEntity> {
+    fun getItemDetail(id: Int): LiveData<UserEntity> {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getItemDetail(id)
         }
@@ -54,6 +54,14 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteByUserId(id)
         }
+    }
+
+    fun searchDatabase(searchQuery: String): LiveData<List<UserEntity>> {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.searchDatabase(searchQuery)
+        }
+        return repository.searchDatabase(searchQuery)
+
     }
 
 }

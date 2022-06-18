@@ -129,11 +129,13 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/llUpdateEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:allowClickWhenDisabled="true"
-                    android:backgroundTint="@android:color/darker_gray"
+                    android:allowClickWhenDisabled="false"
+
+                    android:background="#EDDEDE"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp">
 
@@ -141,7 +143,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/email_icon" />
+                        android:src="@drawable/email_icon_grey" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/Add_User_Email"

@@ -24,10 +24,12 @@ interface UserDAO {
     fun getItemDetail(uid: Int): LiveData<UserEntity>
 
     @Query("SELECT * FROM user_table WHERE id = :uid")
-    fun getItemId(uid: Int):Int
+    fun getItemId(uid: Int): Int
 
     @Query("DELETE FROM user_table WHERE id = :userId")
     fun deleteByUserId(userId: Int)
 
+    @Query("select * from user_table where fName like:searchQuery or lName like:searchQuery or email like:searchQuery")
+    fun searchDatabase(searchQuery: String): LiveData<List<UserEntity>>
 
 }

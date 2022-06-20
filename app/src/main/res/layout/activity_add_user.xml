@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,18 +24,35 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <RelativeLayout
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center">
 
-                <ImageView
-                    android:id="@+id/ivProfile"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="15dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/person_icon" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_gravity="center"
+                        android:layout_margin="16dp"
+                        android:background="@drawable/profile_bg"
+                        android:padding="3dp"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/person_icon" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fab_add_photo"
+                        style="@style/FabStyle"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true" />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/llAddFName"
@@ -49,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_user_grey" />
+                        android:src="@drawable/ic_user" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/Add_User_Firs_Name"
@@ -67,10 +85,12 @@
                             android:hint="First Name"
                             android:singleLine="true" />
                     </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
 
 
                 <LinearLayout
+                    android:id="@+id/llAddLName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -102,6 +122,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/llAddPhoneName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"

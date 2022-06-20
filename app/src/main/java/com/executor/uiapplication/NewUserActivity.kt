@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.executor.uiapplication.db.UserDatabase
 import com.executor.uiapplication.db.UserEntity
 import com.executor.uiapplication.db.UserViewModel
@@ -61,7 +62,7 @@ class NewUserActivity : AppCompatActivity() {
         }
 
 
-        ivProfile.setOnClickListener {
+        fab_add_photo.setOnClickListener {
             if (!checkCameraPermission()) {
                 requestCameraPermission()
             } else {
@@ -116,8 +117,7 @@ class NewUserActivity : AppCompatActivity() {
     private fun showDialog() {
         val alertDialog = AlertDialog.Builder(this)
         alertDialog.apply {
-            setTitle("Select The Option")
-//                setMessage("I just wanted to greet you. I hope you are doing great!")
+            setTitle("Select Option")
             setPositiveButton("CAMERA") { _, _ ->
                 takePicture()
             }
@@ -192,8 +192,8 @@ class NewUserActivity : AppCompatActivity() {
             }
             1 -> if (resultCode == RESULT_OK) {
                 val selectedImage: Uri? = imageReturnedIntent?.data
-                ivProfile.setImageURI(selectedImage)
                 photoPath = selectedImage.toString()
+                Glide.with(this).load(photoPath).circleCrop().into(ivProfile)
             }
         }
     }

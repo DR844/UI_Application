@@ -53,7 +53,7 @@ class UserAdapter(private val context: Context, private var listener: RowClickLi
         holder.email.text = userInfo.email
         holder.age.text = userInfo.age.toString()
         holder.number.text = userInfo.number
-        Glide.with(context).load(userInfo.image).into(holder.image)
+        Glide.with(context).load(userInfo.image).circleCrop().into(holder.image)
         holder.itemView.setOnClickListener {
             if (position != RecyclerView.NO_POSITION) {
                 listener.onItemClickListener(myUser[position])

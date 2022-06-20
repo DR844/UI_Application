@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:dither="true" android:variablePadding="true">
+
+    <item><shape>
+        <gradient android:startColor="@android:color/white"
+            android:endColor="@android:color/white"
+            android:angle="270" />
+        <corners android:radius="25dp" />
+        <stroke android:width="5px" android:color="#058ed3" />
+
+        <!-- <padding android:splash_center="@dimen/buttonVerticalPadding" android:left="@dimen/buttonHorizontalPadding" android:right="@dimen/buttonHorizontalPadding" android:top="@dimen/buttonVerticalPadding" /> -->
+    </shape></item>
+
+</selector>

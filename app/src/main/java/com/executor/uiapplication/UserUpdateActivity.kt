@@ -60,7 +60,7 @@ class UserUpdateActivity : AppCompatActivity() {
                 android.Manifest.permission.CAMERA,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
-        ivUpdateProfile.setOnClickListener {
+        fab_updateAdd_photo.setOnClickListener {
             if (!checkCameraPermission()) {
                 requestCameraPermission()
             } else {
@@ -78,7 +78,7 @@ class UserUpdateActivity : AppCompatActivity() {
             Update_Emails.setText(it.email)
             Update_DOB.text = it.dob
             Update_Phone_Number.setText(it.number)
-            Glide.with(applicationContext).load(it.image).into(ivUpdateProfile)
+            Glide.with(applicationContext).load(it.image).circleCrop().into(ivUpdateProfile)
             photoPath = it.image
         }
 
@@ -132,7 +132,6 @@ class UserUpdateActivity : AppCompatActivity() {
         val alertDialog = AlertDialog.Builder(this)
         alertDialog.apply {
             setTitle("Select The Option")
-//                setMessage("I just wanted to greet you. I hope you are doing great!")
             setPositiveButton("CAMERA") { _, _ ->
                 takePicture()
             }
@@ -207,8 +206,8 @@ class UserUpdateActivity : AppCompatActivity() {
             }
             1 -> if (resultCode == RESULT_OK) {
                 val selectedImage: Uri? = imageReturnedIntent?.data
-                ivUpdateProfile.setImageURI(selectedImage)
                 photoPath = selectedImage.toString()
+                Glide.with(this).load(photoPath).circleCrop().into(ivUpdateProfile)
             }
         }
     }

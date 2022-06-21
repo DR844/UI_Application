@@ -8,12 +8,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.executor.uiapplication.db.UserEntity
 import com.executor.uiapplication.db.UserViewModel
 import com.executor.uiapplication.uitel.LoadingDialog
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_users_details.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -21,40 +23,53 @@ class MainActivity : AppCompatActivity(), UserAdapter.RowClickListener,
     SearchView.OnQueryTextListener {
 
     private lateinit var mUserViewModel: UserViewModel
-    private lateinit var adapter: UserAdapter
+    private lateinit var mAdapter: UserAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(main_toolbar)
-        supportActionBar?.title = "Show User"
 
+        setSupportActionBar(main_toolbar)
+        supportActionBar?.title = getString(R.string.main_toolbar)
 
 
         add_User.setOnClickListener {
-            val intent = Intent(this, NewUserActivity::class.java)
+            val liIntent = Intent(this, NewUserActivity::class.java)
             loadingCall()
-            startActivity(intent)
+            startActivity(liIntent)
         }
 
 
-        adapter = UserAdapter(this@MainActivity, this@MainActivity)
-        Recycler_View.adapter = adapter
+        mAdapter = UserAdapter(this@MainActivity, this@MainActivity)
+        Recycler_View.adapter = mAdapter
         Recycler_View.layoutManager = LinearLayoutManager(this@MainActivity)
 
         mUserViewModel = ViewModelProvider(this@MainActivity)[UserViewModel::class.java]
 
         mUserViewModel.getAllUser.observe(this@MainActivity) {
-            adapter.setListData(it)
+            mAdapter.setListData(it)
         }
+
+        nestedScrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            if (scrollY > oldScrollY && add_User.isShown) {
+                add_User.hide()
+            }
+            if (scrollY < oldScrollY && !add_User.isShown) {
+                add_User.show()
+            }
+            if (scrollY == 0) {
+                add_User.show()
+            }
+        })
+
 
     }
 
     override fun onDeleteUserClickListener(userEntity: UserEntity) {
-        val dialog = AlertDialog.Builder(this@MainActivity)
-        dialog.setTitle("Are you sure delete  ${userEntity.fName}?")
-        dialog.setPositiveButton("Yes") { _, _ ->
+        val lDialog = AlertDialog.Builder(this@MainActivity)
+        lDialog.setTitle(getString(R.string.delete_title))
+        lDialog.setPositiveButton(getString(R.string.Yes)) { _, _ ->
             GlobalScope.launch {
                 mUserViewModel.deleteUser(userEntity)
             }
@@ -63,38 +78,37 @@ class MainActivity : AppCompatActivity(), UserAdapter.RowClickListener,
 
             Toast.makeText(this, userEntity.fName, Toast.LENGTH_SHORT).show()
         }
-        dialog.setNegativeButton("No") { _, _ ->
-            Toast.makeText(this, "Not Delete", Toast.LENGTH_SHORT).show()
+        lDialog.setNegativeButton(getString(R.string.No)) { _, _ ->
+//            Toast.makeText(this, "Not Delete", Toast.LENGTH_SHORT).show()
         }
-        dialog.show()
+        lDialog.show()
     }
 
     override fun onItemClickListener(userEntity: UserEntity) {
-        val intent = Intent(this@MainActivity, UsersDetailsActivity::class.java)
+        val liIntent = Intent(this@MainActivity, UsersDetailsActivity::class.java)
 
         loadingCall()
 
-        intent.putExtra("id", userEntity.id)
-        startActivity(intent)
+        liIntent.putExtra(getString(R.string.id), userEntity.id)
+        startActivity(liIntent)
 
     }
 
     override fun onUpdateClickListener(userEntity: UserEntity) {
-        val intent = Intent(this@MainActivity, UserUpdateActivity::class.java)
+        val liIntent = Intent(this@MainActivity, UserUpdateActivity::class.java)
 
         loadingCall()
 
-        intent.putExtra("id", userEntity.id)
-        intent.putExtra("dob", userEntity.dob)
-        startActivity(intent)
+        liIntent.putExtra(getString(R.string.id), userEntity.id)
+        liIntent.putExtra(getString(R.string.dob), userEntity.dob)
+        startActivity(liIntent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
-        val item = menu?.findItem(R.id.search_View)
-        val searchView = item?.actionView as SearchView
-        searchView.isSubmitButtonEnabled = true
-        searchView.setOnQueryTextListener(this)
+        val loItem = menu?.findItem(R.id.search_View)
+        val lSearchView = loItem?.actionView as SearchView
+        lSearchView.setOnQueryTextListener(this)
         return true
     }
 
@@ -112,20 +126,20 @@ class MainActivity : AppCompatActivity(), UserAdapter.RowClickListener,
         return true
     }
 
-    private fun searchDatabase(query: String) {
-        val searchQuery = "%$query%"
-        mUserViewModel.searchDatabase(searchQuery).observe(this) {
+    private fun searchDatabase(lsQuery: String) {
+        val lsSearchQuery = "%$lsQuery%"
+        mUserViewModel.searchDatabase(lsSearchQuery).observe(this) {
             it.let {
-                adapter.setListData(it)
+                mAdapter.setListData(it)
             }
         }
     }
 
     private fun loadingCall() {
-        val loading = LoadingDialog(this)
-        loading.startLoading()
-        val handler = Handler()
-        handler.postDelayed({ loading.isDismiss() }, 1000)
+        val loLoading = LoadingDialog(this)
+        loLoading.startLoading()
+        val loHandler = Handler()
+        loHandler.postDelayed({ loLoading.isDismiss() }, 1000)
 
     }
 

@@ -33,31 +33,29 @@ class NewUserActivity : AppCompatActivity() {
 
     private lateinit var mUserViewModel: UserViewModel
 
-    private val CAMERA_REQUEST = 100
-    private val STORAGE_REQUEST = 101
+    private val CAMERA_REQUEST = R.string.CAMERA_REQUEST
+    private val STORAGE_REQUEST = R.string.STORAGE_REQUEST
 
-    lateinit var cameraPermission: Array<String>
-
-
-    private var photoPath: String? = "hi"
-
+    lateinit var msCameraPermission: Array<String>
+    private var mPhotoPath: String? = ""
     private var myAge = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_user)
 
-        cameraPermission =
+        msCameraPermission =
             arrayOf(
                 android.Manifest.permission.CAMERA,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
         // initialize views
-        setSupportActionBar(add_toolbar)
-        supportActionBar?.title = "Add User Detail"
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = getString(R.string.add_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        add_toolbar?.setNavigationOnClickListener {
+
+        toolbar?.setNavigationOnClickListener {
             finish()
         }
 
@@ -70,25 +68,25 @@ class NewUserActivity : AppCompatActivity() {
             }
         }
 
-        val myCalender = Calendar.getInstance()
+        val loMyCalender = Calendar.getInstance()
 
-        val datePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            myCalender.set(Calendar.YEAR, year)
-            myCalender.set(Calendar.MONTH, month)
-            myCalender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updatable(myCalender)
+        val loDatePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+            loMyCalender.set(Calendar.YEAR, year)
+            loMyCalender.set(Calendar.MONTH, month)
+            loMyCalender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updatable(loMyCalender)
         }
 
         DOB.setOnClickListener {
-            val dialog = DatePickerDialog(
+            val loDialog = DatePickerDialog(
                 this,
-                datePicker,
-                myCalender.get(Calendar.YEAR),
-                myCalender.get(Calendar.MONTH),
-                myCalender.get(Calendar.DAY_OF_MONTH)
+                loDatePicker,
+                loMyCalender.get(Calendar.YEAR),
+                loMyCalender.get(Calendar.MONTH),
+                loMyCalender.get(Calendar.DAY_OF_MONTH)
             )
-            dialog.datePicker.maxDate = myCalender.timeInMillis
-            dialog.show()
+            loDialog.datePicker.maxDate = loMyCalender.timeInMillis
+            loDialog.show()
         }
 
         mUserViewModel = ViewModelProvider(this)[UserViewModel::class.java]
@@ -100,10 +98,9 @@ class NewUserActivity : AppCompatActivity() {
             insertDataToDatabase()
         }
 
-
-        First_Name.setOnClickListener {
-            llAddImg.setColorFilter(R.drawable.ic_user)
-        }
+//        First_Name.setOnClickListener {
+//            llAddImg.setColorFilter(R.drawable.ic_user)
+//        }
 //        First_Name.onFocusChangeListener.onFocusChange(View(this),false){
 //            if(First_Name.isClickable){
 //
@@ -115,71 +112,71 @@ class NewUserActivity : AppCompatActivity() {
     }
 
     private fun showDialog() {
-        val alertDialog = AlertDialog.Builder(this)
-        alertDialog.apply {
-            setTitle("Select Option")
-            setPositiveButton("CAMERA") { _, _ ->
+        val loAlertDialog = AlertDialog.Builder(this)
+        loAlertDialog.apply {
+            setTitle(getString(R.string.camera_option))
+            setPositiveButton(getString(R.string.CAMERA)) { _, _ ->
                 takePicture()
             }
-            setNegativeButton("GALLERY") { _, _ ->
-                val pickPhoto = Intent(
+            setNegativeButton(getString(R.string.GALLERY)) { _, _ ->
+                val liPickPhoto = Intent(
                     Intent.ACTION_PICK,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 )
                 startActivityForResult(
-                    pickPhoto,
+                    liPickPhoto,
                     1
                 ) //one can be replaced with any action code
             }
-            setNeutralButton("CANCEL") { _, _ ->
+            setNeutralButton(getString(R.string.CANCEL)) { _, _ ->
 
             }
         }.create().show()
     }
 
     private fun takePicture() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(packageManager) != null) {
-            var photofile: File? = null
+        val liIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (liIntent.resolveActivity(packageManager) != null) {
+            var loPhotofile: File? = null
             try {
-                photofile = createImageFile()
+                loPhotofile = createImageFile()
             } catch (e: IOException) {
             }
-            if (photofile != null) {
+            if (loPhotofile != null) {
                 val photoUri = FileProvider.getUriForFile(
                     this,
-                    "com.executor.uiapplication.fileprovider",
-                    photofile
+                    getString(R.string.photoUri),
+                    loPhotofile
                 )
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                startActivityForResult(intent, 0)
+                liIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                startActivityForResult(liIntent, 0)
             }
 
         }
     }
 
     private fun createImageFile(): File? {
-        val filename = "MyProfile"
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val image = File.createTempFile(filename, ".jpg", storageDir)
-        photoPath = image.absolutePath
-        return image
+        val lsFilename = getString(R.string.filename)
+        val loStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val loImage = File.createTempFile(lsFilename, getString(R.string.image_ext), loStorageDir)
+        mPhotoPath = loImage.absolutePath
+        return loImage
     }
 
     private fun requestCameraPermission() {
-        requestPermissions(cameraPermission, STORAGE_REQUEST)
+        requestPermissions(msCameraPermission, STORAGE_REQUEST)
     }
 
     private fun checkCameraPermission(): Boolean {
-        val result = ContextCompat.checkSelfPermission(
+        val lbResult = ContextCompat.checkSelfPermission(
             this,
             android.Manifest.permission.CAMERA
         ) == (PackageManager.PERMISSION_GRANTED)
-        val result2 = ContextCompat.checkSelfPermission(
+        val lbResult2 = ContextCompat.checkSelfPermission(
             this,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == (PackageManager.PERMISSION_GRANTED)
-        return result && result2
+        return lbResult && lbResult2
 
     }
 
@@ -188,12 +185,12 @@ class NewUserActivity : AppCompatActivity() {
         when (requestCode) {
             0 -> if (resultCode == RESULT_OK) {
 //                ivProfile.rotation = 90f
-                ivProfile.setImageURI(Uri.parse(photoPath))
+                Glide.with(this).load(mPhotoPath).circleCrop().into(ivProfile)
             }
             1 -> if (resultCode == RESULT_OK) {
                 val selectedImage: Uri? = imageReturnedIntent?.data
-                photoPath = selectedImage.toString()
-                Glide.with(this).load(photoPath).circleCrop().into(ivProfile)
+                mPhotoPath = selectedImage.toString()
+                Glide.with(this).load(mPhotoPath).circleCrop().into(ivProfile)
             }
         }
     }
@@ -220,12 +217,12 @@ class NewUserActivity : AppCompatActivity() {
 
 
     private fun updatable(myCalender: Calendar) {
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val birthYear = myCalender.get(Calendar.YEAR)
-        myAge = currentYear - birthYear
-        val myFormat = "dd-MM-yyyy"
-        val sdf = SimpleDateFormat(myFormat, Locale.UK)
-        DOB.text = sdf.format(myCalender.time)
+        val loCurrentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val loBirthYear = myCalender.get(Calendar.YEAR)
+        myAge = loCurrentYear - loBirthYear
+        val lsMyFormat = getString(R.string.date_format)
+        val loSdf = SimpleDateFormat(lsMyFormat, Locale.UK)
+        DOB.text = loSdf.format(myCalender.time)
     }
 
     private fun insertDataToDatabase() {
@@ -238,31 +235,31 @@ class NewUserActivity : AppCompatActivity() {
 
 
         if (fName.isEmpty()) {
-            First_Name.error = "Required!!"
+            First_Name.error = getString(R.string.error)
             return
         }
         if (lName.isEmpty()) {
-            Last_Name.error = "Required!!"
+            Last_Name.error = getString(R.string.error)
             return
         }
         if (number.isEmpty()) {
-            Phone_Number.error = "Required!!"
+            Phone_Number.error = getString(R.string.error)
             return
         }
         if (email.isEmpty()) {
-            Emails.error = "Required!!"
+            Emails.error = getString(R.string.error)
             return
         }
 
         if (!TextUtils.isEmpty(dob)) {
             if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                Toast.makeText(this, " Invalid Email Format", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.email_check), Toast.LENGTH_SHORT).show()
             } else {
                 if (UserDatabase.getDatabase(this).userDao().isEmailExist(email) == 0) {
                     val user =
                         UserEntity(
                             0,
-                            photoPath!!,
+                            mPhotoPath!!,
                             fName,
                             lName,
                             email,
@@ -275,24 +272,25 @@ class NewUserActivity : AppCompatActivity() {
                         mUserViewModel.insertUser(user)
                     }
 
-                    val intent = Intent(this, MainActivity::class.java)
+                    val liIntent = Intent(this, MainActivity::class.java)
 
                     val loading = LoadingDialog(this)
                     loading.startLoading()
                     val handler = Handler()
                     handler.postDelayed({ loading.isDismiss() }, 2000)
 
-                    startActivity(intent)
+                    startActivity(liIntent)
 
-                    Toast.makeText(this, "Successfully Added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.success_msg), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "Email id Already Exists", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.email_exists), Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         } else {
             Toast.makeText(
                 this,
-                "Please fill out DOB Fields ",
+                getString(R.string.dob_check),
                 Toast.LENGTH_SHORT
             )
                 .show()

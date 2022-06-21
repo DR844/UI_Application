@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">Room Database </string>
+    <string name="CAMERA_REQUEST">100</string>
+    <string name="STORAGE_REQUEST">101</string>
+    <string name="main_toolbar">"Show User"</string>
+    <string name="id">"id"</string>
+    <string name="dob">"dob"</string>
+    <string name="delete_title">"Delete this user?"</string>
+    <string name="add_toolbar">"Add User Detail"</string>
+    <string name="update_toolbar">"Update User Detail"</string>
+    <string name="filename">"MyProfile"</string>
+    <string name="image_ext">".jpg"</string>
+    <string name="date_format">"dd-MM-yyyy"</string>
+    <string name="photoUri">"com.executor.uiapplication.fileprovider"</string>
+    <string name="email_exists">"Email id Already Exists"</string>
+    <string name="success_msg">"Successfully Added"</string>
+    <string name="dob_check">"Please fill DOB Fields"</string>
+    <string name="email_check">"Invalid Email Format"</string>
+    <string name="error">"Required!!"</string>
+    <string name="camera_option">"Select Option"</string>
+    <string name="CAMERA">"CAMERA"</string>
+    <string name="GALLERY">"GALLERY"</string>
+    <string name="CANCEL">"CANCEL"</string>
+    <string name="Yes">"Yes"</string>
+    <string name="No">"No"</string>
+
+
 </resources>

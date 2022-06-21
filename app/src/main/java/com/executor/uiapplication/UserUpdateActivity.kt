@@ -10,6 +10,7 @@ import android.os.Environment
 import android.os.Handler
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -32,30 +33,31 @@ import java.util.*
 class UserUpdateActivity : AppCompatActivity() {
 
     private lateinit var mUserViewModel: UserViewModel
-    private val CAMERA_REQUEST = 100
-    private val STORAGE_REQUEST = 101
 
-    lateinit var cameraPermission: Array<String>
+    private val CAMERA_REQUEST = (R.string.CAMERA_REQUEST)
+    private val STORAGE_REQUEST = (R.string.STORAGE_REQUEST)
+
+    lateinit var msCameraPermission: Array<String>
 
 
-    private var photoPath: String? = null
+    private var msPhotoPath: String? = ""
 
     companion object {
-        private var myAge = 0
+        private var miMyAge = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_update)
 
-        setSupportActionBar(add_toolbar)
-        supportActionBar?.title = "Update User Detail"
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = getString(R.string.update_toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        add_toolbar?.setNavigationOnClickListener {
+        toolbar?.setNavigationOnClickListener {
             finish()
         }
-        cameraPermission =
+        msCameraPermission =
             arrayOf(
                 android.Manifest.permission.CAMERA,
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -71,44 +73,51 @@ class UserUpdateActivity : AppCompatActivity() {
 
         mUserViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
-        val updateIntent = mUserViewModel.getItemDetail(intent.getIntExtra("id", 0))
-        updateIntent.observe(this) {
+        val liUpdateUser =
+            mUserViewModel.getItemDetail(intent.getIntExtra(getString(R.string.id), 0))
+        liUpdateUser.observe(this) {
             Update_First_Name.setText(it.fName)
             Update_Last_Name.setText(it.lName)
             Update_Emails.setText(it.email)
             Update_DOB.text = it.dob
             Update_Phone_Number.setText(it.number)
             Glide.with(applicationContext).load(it.image).circleCrop().into(ivUpdateProfile)
-            photoPath = it.image
+            msPhotoPath = it.image
+
+            if (msPhotoPath == "") {
+                Glide.with(applicationContext).load(R.drawable.person_icon).circleCrop()
+                    .into(ivUpdateProfile)
+                Log.d("Test", "Empty");
+            }
         }
 
-        val sdf = SimpleDateFormat("dd-MM-yyyy")
+        val lSdf = SimpleDateFormat(getString(R.string.date_format))
 
-        val date = sdf.parse(intent.getStringExtra("dob")!!)
+        val lDate = lSdf.parse(intent.getStringExtra(getString(R.string.dob))!!)
 
 //        val date = sdf.parse(updateIntent.observe(this){it.dob}.toString())!!
 
-        val myCalender = Calendar.getInstance()
-        myCalender.time = date!!
+        val loMyCalender = Calendar.getInstance()
+        loMyCalender.time = lDate!!
 
-        val datePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+        val loDatePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
 
-            myCalender.set(Calendar.YEAR, year)
-            myCalender.set(Calendar.MONTH, month)
-            myCalender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updatable(myCalender)
+            loMyCalender.set(Calendar.YEAR, year)
+            loMyCalender.set(Calendar.MONTH, month)
+            loMyCalender.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updatable(loMyCalender)
         }
 
         Update_DOB.setOnClickListener {
-            val dialog = DatePickerDialog(
+            val lDialog = DatePickerDialog(
                 this,
-                datePicker,
-                myCalender.get(Calendar.YEAR),
-                myCalender.get(Calendar.MONTH),
-                myCalender.get(Calendar.DAY_OF_MONTH)
+                loDatePicker,
+                loMyCalender.get(Calendar.YEAR),
+                loMyCalender.get(Calendar.MONTH),
+                loMyCalender.get(Calendar.DAY_OF_MONTH)
             )
-            dialog.datePicker.maxDate = myCalender.timeInMillis
-            dialog.show()
+            lDialog.datePicker.maxDate = loMyCalender.timeInMillis
+            lDialog.show()
         }
 
 
@@ -125,75 +134,77 @@ class UserUpdateActivity : AppCompatActivity() {
 //                return@setOnClickListener
 //            }
 //        }
+
+
     }
 
 
     private fun showDialog() {
-        val alertDialog = AlertDialog.Builder(this)
-        alertDialog.apply {
-            setTitle("Select The Option")
-            setPositiveButton("CAMERA") { _, _ ->
+        val lAlertDialog = AlertDialog.Builder(this)
+        lAlertDialog.apply {
+            setTitle(getString(R.string.camera_option))
+            setPositiveButton(getString(R.string.CAMERA)) { _, _ ->
                 takePicture()
             }
-            setNegativeButton("GALLERY") { _, _ ->
-                val pickPhoto = Intent(
+            setNegativeButton(getString(R.string.GALLERY)) { _, _ ->
+                val liPickPhoto = Intent(
                     Intent.ACTION_PICK,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 )
                 startActivityForResult(
-                    pickPhoto,
+                    liPickPhoto,
                     1
                 ) //one can be replaced with any action code
             }
-            setNeutralButton("CANCEL") { _, _ ->
+            setNeutralButton(getString(R.string.CANCEL)) { _, _ ->
 
             }
         }.create().show()
     }
 
     private fun takePicture() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(packageManager) != null) {
-            var photofile: File? = null
+        val liIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (liIntent.resolveActivity(packageManager) != null) {
+            var loPhotofile: File? = null
             try {
-                photofile = createImageFile()
+                loPhotofile = createImageFile()
             } catch (e: IOException) {
             }
-            if (photofile != null) {
+            if (loPhotofile != null) {
                 val photoUri = FileProvider.getUriForFile(
                     this,
-                    "com.executor.uiapplication.fileprovider",
-                    photofile
+                    getString(R.string.photoUri),
+                    loPhotofile
                 )
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                startActivityForResult(intent, 0)
+                liIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                startActivityForResult(liIntent, 0)
             }
 
         }
     }
 
     private fun createImageFile(): File? {
-        val filename = "MyProfile"
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val image = File.createTempFile(filename, ".jpg", storageDir)
-        photoPath = image.absolutePath
-        return image
+        val lsFilename = getString(R.string.filename)
+        val loStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val loImage = File.createTempFile(lsFilename, getString(R.string.image_ext), loStorageDir)
+        msPhotoPath = loImage.absolutePath
+        return loImage
     }
 
     private fun requestCameraPermission() {
-        requestPermissions(cameraPermission, STORAGE_REQUEST)
+        requestPermissions(msCameraPermission, (R.string.CAMERA_REQUEST))
     }
 
     private fun checkCameraPermission(): Boolean {
-        val result = ContextCompat.checkSelfPermission(
+        val lbResult = ContextCompat.checkSelfPermission(
             this,
             android.Manifest.permission.CAMERA
         ) == (PackageManager.PERMISSION_GRANTED)
-        val result2 = ContextCompat.checkSelfPermission(
+        val lbResult2 = ContextCompat.checkSelfPermission(
             this,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) == (PackageManager.PERMISSION_GRANTED)
-        return result && result2
+        return lbResult && lbResult2
 
     }
 
@@ -202,12 +213,12 @@ class UserUpdateActivity : AppCompatActivity() {
         when (requestCode) {
             0 -> if (resultCode == RESULT_OK) {
 //                ivProfile.rotation = 90f
-                ivUpdateProfile.setImageURI(Uri.parse(photoPath))
+                Glide.with(this).load(msPhotoPath).circleCrop().into(ivUpdateProfile)
             }
             1 -> if (resultCode == RESULT_OK) {
                 val selectedImage: Uri? = imageReturnedIntent?.data
-                photoPath = selectedImage.toString()
-                Glide.with(this).load(photoPath).circleCrop().into(ivUpdateProfile)
+                msPhotoPath = selectedImage.toString()
+                Glide.with(this).load(msPhotoPath).circleCrop().into(ivUpdateProfile)
             }
         }
     }
@@ -241,22 +252,25 @@ class UserUpdateActivity : AppCompatActivity() {
         val number = Update_Phone_Number.text.toString()
         val dob = Update_DOB.text.toString()
 
+
         val date = Update_DOB.text.toString()
         val dateParts: List<String> = date.split("-")
         val year = dateParts[2]
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        myAge = currentYear - year.toInt()
+        miMyAge = currentYear - year.toInt()
+
+
 
         if (fName.isEmpty()) {
-            First_Name.error = "Required!!"
+            First_Name.error = getString(R.string.error)
             return
         }
         if (lName.isEmpty()) {
-            Last_Name.error = "Required!!"
+            Last_Name.error = getString(R.string.error)
             return
         }
         if (number.isEmpty()) {
-            Phone_Number.error = "Required!!"
+            Phone_Number.error = getString(R.string.error)
             return
         }
 
@@ -265,12 +279,12 @@ class UserUpdateActivity : AppCompatActivity() {
             val user =
                 UserEntity(
                     id,
-                    photoPath!!,
+                    msPhotoPath!!,
                     fName,
                     lName,
                     email,
                     dob,
-                    myAge,
+                    miMyAge,
                     number,
                     Date()
                 )
@@ -288,11 +302,11 @@ class UserUpdateActivity : AppCompatActivity() {
 
             startActivity(intent)
 
-            Toast.makeText(this, "Successfully Updated", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.success_msg), Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(
                 this,
-                "Please fill out all Fields ",
+                getString(R.string.dob_check),
                 Toast.LENGTH_SHORT
             )
                 .show()
@@ -300,11 +314,11 @@ class UserUpdateActivity : AppCompatActivity() {
     }
 
     private fun updatable(myCalender: Calendar) {
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val birthYear = myCalender.get(Calendar.YEAR)
-        myAge = currentYear - birthYear
-        val myFormat = "dd-MM-yyyy"
-        val sdf = SimpleDateFormat(myFormat, Locale.UK)
-        Update_DOB.text = sdf.format(myCalender.time)
+        val loCurrentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val loBirthYear = myCalender.get(Calendar.YEAR)
+        miMyAge = loCurrentYear - loBirthYear
+        val lsMyFormat = getString(R.string.date_format)
+        val loSdf = SimpleDateFormat(lsMyFormat, Locale.UK)
+        Update_DOB.text = loSdf.format(myCalender.time)
     }
 }

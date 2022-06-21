@@ -21,7 +21,7 @@ class LoadingDialog(private val foContext: Context) {
         isDialog.show()*/
         moDialog = Dialog(foContext)
         val inflate = LayoutInflater.from(foContext).inflate(R.layout.loading_layout, null)
-        moDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        moDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         moDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         moDialog.setContentView(inflate)
         moDialog.setCancelable(false)

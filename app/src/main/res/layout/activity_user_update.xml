@@ -49,14 +49,14 @@
                         android:layout_alignParentBottom="true" />
 
                 </RelativeLayout>
-<!--                <ImageView-->
-<!--                    android:id="@+id/ivUpdateProfile"-->
-<!--                    android:layout_width="200dp"-->
-<!--                    android:layout_height="200dp"-->
-<!--                    android:layout_gravity="center_horizontal"-->
-<!--                    android:layout_marginTop="15dp"-->
-<!--                    android:scaleType="fitXY"-->
-<!--                    android:src="@drawable/person_icon" />-->
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/ivUpdateProfile"-->
+                <!--                    android:layout_width="200dp"-->
+                <!--                    android:layout_height="200dp"-->
+                <!--                    android:layout_gravity="center_horizontal"-->
+                <!--                    android:layout_marginTop="15dp"-->
+                <!--                    android:scaleType="fitXY"-->
+                <!--                    android:src="@drawable/person_icon" />-->
 
 
                 <LinearLayout
@@ -158,13 +158,12 @@
                 <LinearLayout
                     android:id="@+id/llUpdateEmail"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="16dp"
-                    android:allowClickWhenDisabled="false"
-
-                    android:background="#EDDEDE"
                     android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp">
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/ripple_effect"
+                    android:clickable="true">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -172,30 +171,25 @@
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/email_icon_grey" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/Add_User_Email"
+
+                    <TextView
+                        android:id="@+id/Update_Emails"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="16dp"
-                        android:layout_marginLeft="16dp">
+                        android:layout_marginLeft="18dp"
+                        android:editable="false"
+                        android:hint="Email"
+                        android:singleLine="true"
+                        android:textSize="25sp"
+                        tools:ignore="Deprecated" />
 
-                        <EditText
-                            android:id="@+id/Update_Emails"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:editable="false"
-                            android:hint="Email"
-                            android:singleLine="true"
-                            tools:ignore="Deprecated" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="16dp">
